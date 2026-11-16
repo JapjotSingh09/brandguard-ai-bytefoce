@@ -10,33 +10,105 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as GuidelinesRouteImport } from './routes/guidelines'
+import { Route as ResultsRouteImport } from './routes/results'
+import { Route as ReviewRouteImport } from './routes/review'
+import { Route as SubmitRouteImport } from './routes/submit'
+import { Route as ResultsIndexRouteImport } from './routes/results.index'
+import { Route as ResultsIdRouteImport } from './routes/results.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GuidelinesRoute = GuidelinesRouteImport.update({
+  id: '/guidelines',
+  path: '/guidelines',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResultsRoute = ResultsRouteImport.update({
+  id: '/results',
+  path: '/results',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReviewRoute = ReviewRouteImport.update({
+  id: '/review',
+  path: '/review',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SubmitRoute = SubmitRouteImport.update({
+  id: '/submit',
+  path: '/submit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResultsIndexRoute = ResultsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ResultsRoute,
+} as any)
+const ResultsIdRoute = ResultsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ResultsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/guidelines': typeof GuidelinesRoute
+  '/results': typeof ResultsRouteWithChildren
+  '/review': typeof ReviewRoute
+  '/submit': typeof SubmitRoute
+  '/results/$id': typeof ResultsIdRoute
+  '/results/': typeof ResultsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/guidelines': typeof GuidelinesRoute
+  '/review': typeof ReviewRoute
+  '/submit': typeof SubmitRoute
+  '/results/$id': typeof ResultsIdRoute
+  '/results': typeof ResultsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/guidelines': typeof GuidelinesRoute
+  '/results': typeof ResultsRouteWithChildren
+  '/review': typeof ReviewRoute
+  '/submit': typeof SubmitRoute
+  '/results/$id': typeof ResultsIdRoute
+  '/results/': typeof ResultsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/guidelines'
+    | '/results'
+    | '/review'
+    | '/submit'
+    | '/results/$id'
+    | '/results/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/guidelines' | '/review' | '/submit' | '/results/$id' | '/results'
+  id:
+    | '__root__'
+    | '/'
+    | '/guidelines'
+    | '/results'
+    | '/review'
+    | '/submit'
+    | '/results/$id'
+    | '/results/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  GuidelinesRoute: typeof GuidelinesRoute
+  ResultsRoute: typeof ResultsRouteWithChildren
+  ReviewRoute: typeof ReviewRoute
+  SubmitRoute: typeof SubmitRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +120,70 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/guidelines': {
+      id: '/guidelines'
+      path: '/guidelines'
+      fullPath: '/guidelines'
+      preLoaderRoute: typeof GuidelinesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/results': {
+      id: '/results'
+      path: '/results'
+      fullPath: '/results'
+      preLoaderRoute: typeof ResultsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/review': {
+      id: '/review'
+      path: '/review'
+      fullPath: '/review'
+      preLoaderRoute: typeof ReviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/submit': {
+      id: '/submit'
+      path: '/submit'
+      fullPath: '/submit'
+      preLoaderRoute: typeof SubmitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/results/': {
+      id: '/results/'
+      path: '/'
+      fullPath: '/results/'
+      preLoaderRoute: typeof ResultsIndexRouteImport
+      parentRoute: typeof ResultsRoute
+    }
+    '/results/$id': {
+      id: '/results/$id'
+      path: '/$id'
+      fullPath: '/results/$id'
+      preLoaderRoute: typeof ResultsIdRouteImport
+      parentRoute: typeof ResultsRoute
+    }
   }
 }
 
+interface ResultsRouteChildren {
+  ResultsIdRoute: typeof ResultsIdRoute
+  ResultsIndexRoute: typeof ResultsIndexRoute
+}
+
+const ResultsRouteChildren: ResultsRouteChildren = {
+  ResultsIdRoute: ResultsIdRoute,
+  ResultsIndexRoute: ResultsIndexRoute,
+}
+
+const ResultsRouteWithChildren =
+  ResultsRoute._addFileChildren(ResultsRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  GuidelinesRoute: GuidelinesRoute,
+  ResultsRoute: ResultsRouteWithChildren,
+  ReviewRoute: ReviewRoute,
+  SubmitRoute: SubmitRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

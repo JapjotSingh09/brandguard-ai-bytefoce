@@ -28,3 +28,7 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+- Keep BrandGuard features in src/features/brandguard and content pages in TanStack leaf routes so workflow logic stays reusable.
+- Use Cloud tables for the intentionally public hackathon workspace; warn users not to submit confidential content because visitors share data.
+- Keep the checker pure and deterministic with rule snapshots on each submission so findings remain traceable after guideline changes; no AI calls are integrated.
